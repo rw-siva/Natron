@@ -21,6 +21,10 @@ file(GLOB NatronEngine_HEADERS ../Engine/*.h)
 file(GLOB NatronGui_HEADERS *.h)
 file(GLOB NatronGui_SOURCES *.cpp)
 
+# ViewerGLPrivate uses OCIO directly, including builds without Cycles.
+include(FindPkgConfig)
+pkg_check_modules(OpenColorIO REQUIRED IMPORTED_TARGET OpenColorIO)
+
 # ImGui + ImGuizmo (MIT license)
 list(APPEND NatronGui_SOURCES
     ImGuizmo/imgui.cpp
@@ -84,6 +88,7 @@ target_link_libraries(NatronGui
         ${QT_OPENGLWIDGETS}
         NatronEngine
     PRIVATE
+        PkgConfig::OpenColorIO
         ${SHIBOKEN_LIB}
         ${PYSIDE_LIB}
         Python3::Module

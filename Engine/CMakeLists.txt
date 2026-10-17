@@ -71,6 +71,10 @@ list(APPEND NatronEngine_SOURCES ${DevDeep_SOURCES} ${DevScene3D_SOURCES} ${DevP
 if(NATRON_CYCLES)
     list(APPEND NatronEngine_HEADERS ${DevCycles_HEADERS})
     list(APPEND NatronEngine_SOURCES ${DevCycles_SOURCES})
+else()
+    # KnobFactory and serialization register this control even without Cycles.
+    list(APPEND NatronEngine_HEADERS Dev/Cycles/KnobPassTable.h)
+    list(APPEND NatronEngine_SOURCES Dev/Cycles/KnobPassTable.cpp)
 endif()
 if(NATRON_FASTVOLUME)
     list(APPEND NatronEngine_HEADERS ${DevFastVolume_HEADERS})

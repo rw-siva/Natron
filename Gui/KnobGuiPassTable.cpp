@@ -73,6 +73,7 @@ KnobGuiPassTable::createWidget(QHBoxLayout* layout)
 void
 KnobGuiPassTable::onRefreshObjects()
 {
+#ifdef NATRON_CYCLES
     if (!_widget) return;
     KnobPassTablePtr knob = _knob.lock();
     if (!knob) return;
@@ -87,6 +88,7 @@ KnobGuiPassTable::onRefreshObjects()
     for (size_t i = 0; i < lights.size(); ++i) qlights << QString::fromStdString(lights[i]);
     _widget->setAvailableObjects(qgeo);
     _widget->setAvailableLights(qlights);
+#endif
 }
 
 void
