@@ -162,6 +162,8 @@ struct ViewerTabPrivate
     ComboBox* timeFormat;
     Button* turboButton;
     QTimer mustSetUpPlaybackButtonsTimer;
+    QTimer emptyViewerPlaybackTimer;
+    int emptyViewerPlaybackDirection;
 
     /*frame seeker*/
     TimeLineGui* timeLineGui;

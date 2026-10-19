@@ -37,6 +37,8 @@
 #include <QSettings>
 #include <QFile>
 #include <QFileInfo>
+#include <QFileSystemWatcher>
+#include <QTimer>
 
 #include <QAction>
 #include <QApplication>
@@ -278,6 +280,33 @@ Gui::loadStyleSheet()
                                             "QInputDialog { font-family: \"%1\"; font-size: %2pt; }\n" // ... or the label doesn't get the right font
                                             ).arg(appFont).arg(appFontSize);
         content += in.readAll();
+        const QString liveThemePath = QString::fromLocal8Bit(qgetenv("NATRON_THEME_STYLESHEET"));
+        QFile themeOverrides(liveThemePath.isEmpty()
+                                 ? QString::fromUtf8(":/Resources/Stylesheets/theme-editor.qss")
+                                 : liveThemePath);
+        if (themeOverrides.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream overrides(&themeOverrides);
+            content += QLatin1Char('\n');
+            content += overrides.readAll();
+        }
+        if (!liveThemePath.isEmpty()) {
+            static QFileSystemWatcher* themeWatcher = 0;
+            if (!themeWatcher) {
+                themeWatcher = new QFileSystemWatcher(qApp);
+                QObject::connect(themeWatcher, &QFileSystemWatcher::fileChanged, qApp,
+                                 [](const QString& path) {
+                    QTimer::singleShot(150, qApp, [path]() {
+                        if (QFileInfo::exists(path) && !themeWatcher->files().contains(path)) {
+                            themeWatcher->addPath(path);
+                        }
+                        Gui::loadStyleSheet();
+                    });
+                });
+            }
+            if (QFileInfo::exists(liveThemePath) && !themeWatcher->files().contains(liveThemePath)) {
+                themeWatcher->addPath(liveThemePath);
+            }
+        }
 #ifdef DEBUG
         boost_adaptbx::floating_point::exception_trapping trap(0);
 #endif

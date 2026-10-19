@@ -1,0 +1,17 @@
+<RCC>
+ <qresource prefix="/natron/design">
+  <file alias="image_grouping_3.png">../Gui/Resources/Images/GroupingIcons/Set3/image_grouping_3.png</file>
+  <file alias="color_grouping_3.png">../Gui/Resources/Images/GroupingIcons/Set3/color_grouping_3.png</file>
+  <file alias="filter_grouping_3.png">../Gui/Resources/Images/GroupingIcons/Set3/filter_grouping_3.png</file>
+  <file alias="merge_grouping_3.png">../Gui/Resources/Images/GroupingIcons/Set3/merge_grouping_3.png</file>
+  <file alias="transform_grouping_3.png">../Gui/Resources/Images/GroupingIcons/Set3/transform_grouping_3.png</file>
+  <file alias="firstFrame.png">../Gui/Resources/Images/firstFrame.png</file>
+  <file alias="prevKF.png">../Gui/Resources/Images/prevKF.png</file>
+  <file alias="back1.png">../Gui/Resources/Images/back1.png</file>
+  <file alias="rewind.png">../Gui/Resources/Images/rewind.png</file>
+  <file alias="play.png">../Gui/Resources/Images/play.png</file>
+  <file alias="forward1.png">../Gui/Resources/Images/forward1.png</file>
+  <file alias="nextKF.png">../Gui/Resources/Images/nextKF.png</file>
+  <file alias="lastFrame.png">../Gui/Resources/Images/lastFrame.png</file>
+ </qresource>
+</RCC>

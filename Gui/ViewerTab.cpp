@@ -141,6 +141,7 @@ ViewerTab::ViewerTab(const std::list<NodeGuiPtr> & existingNodesContext,
     _imp->mainLayout->addWidget(_imp->firstSettingsRow);
 
     _imp->layerChoice = new ComboBox(_imp->firstSettingsRow);
+    _imp->layerChoice->setObjectName(QString::fromUtf8("natronViewerLayer"));
     _imp->layerChoice->setToolTip( QString::fromUtf8("<p><b>") + tr("Layer:") + QString::fromUtf8("</b></p><p>")
                                    + tr("The layer that the Viewer node will fetch upstream in the tree. "
                                         "The channels of the layer will be mapped to the RGBA channels of the viewer according to "
@@ -151,6 +152,7 @@ ViewerTab::ViewerTab(const std::list<NodeGuiPtr> & existingNodesContext,
     _imp->firstRowLayout->addWidget(_imp->layerChoice);
 
     _imp->alphaChannelChoice = new ComboBox(_imp->firstSettingsRow);
+    _imp->alphaChannelChoice->setObjectName(QString::fromUtf8("natronViewerAlpha"));
     _imp->alphaChannelChoice->setToolTip( QString::fromUtf8("<p><b>") + tr("Alpha channel:") + QString::fromUtf8("</b></p><p>")
                                           + tr("Select here a channel of any layer that will be used when displaying the "
                                                "alpha channel with the <b>Channels</b> choice on the right.") + QString::fromUtf8("</p>") );
@@ -160,6 +162,7 @@ ViewerTab::ViewerTab(const std::list<NodeGuiPtr> & existingNodesContext,
     _imp->firstRowLayout->addWidget(_imp->alphaChannelChoice);
 
     _imp->viewerChannels = new ChannelsComboBox(_imp->firstSettingsRow);
+    _imp->viewerChannels->setObjectName(QString::fromUtf8("natronViewerChannels"));
     _imp->viewerChannels->setToolTip( QString::fromUtf8("<p><b>") + tr("Display Channels:") + QString::fromUtf8("</b></p><p>")
                                       + tr("The channels to display on the viewer.") + QString::fromUtf8("</p>") );
     _imp->firstRowLayout->addWidget(_imp->viewerChannels);
@@ -187,6 +190,7 @@ ViewerTab::ViewerTab(const std::list<NodeGuiPtr> & existingNodesContext,
     QObject::connect( _imp->viewerChannels, SIGNAL(currentIndexChanged(int)), this, SLOT(onViewerChannelsChanged(int)) );
 
     _imp->zoomCombobox = new ComboBox(_imp->firstSettingsRow);
+    _imp->zoomCombobox->setObjectName(QString::fromUtf8("natronViewerZoom"));
     _imp->zoomCombobox->setToolTip( QString::fromUtf8("<p><b>") + tr("Zoom:") + QString::fromUtf8("</b></p>")
                                     + tr("The zoom applied to the image on the viewer.") + QString::fromUtf8("</p>") );
 
@@ -295,6 +299,7 @@ ViewerTab::ViewerTab(const std::list<NodeGuiPtr> & existingNodesContext,
     _imp->firstRowLayout->addWidget(_imp->activateRenderScale);
 
     _imp->renderScaleCombo = new ComboBox(_imp->firstSettingsRow);
+    _imp->renderScaleCombo->setObjectName(QString::fromUtf8("natronViewerRenderScale"));
     _imp->renderScaleCombo->setFocusPolicy(Qt::NoFocus);
     _imp->renderScaleCombo->setToolTip( NATRON_NAMESPACE::convertFromPlainText(tr("When proxy mode is activated, it scales down the rendered image by this factor "
                                                                           "to accelerate the rendering."), NATRON_NAMESPACE::WhiteSpaceNormal) );
@@ -359,6 +364,7 @@ ViewerTab::ViewerTab(const std::list<NodeGuiPtr> & existingNodesContext,
     _imp->firstRowLayout->addWidget(_imp->firstInputLabel);
 
     _imp->firstInputImage = new ComboBox(_imp->firstSettingsRow);
+    _imp->firstInputImage->setObjectName(QString::fromUtf8("natronViewerA"));
     _imp->firstInputImage->setToolTip( _imp->firstInputLabel->toolTip() );
     _imp->firstInputImage->setFixedWidth(fm.horizontalAdvance( QString::fromUtf8("ColorCorrect1") ) + 3 * DROP_DOWN_ICON_SIZE);
     _imp->firstInputImage->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -375,6 +381,7 @@ ViewerTab::ViewerTab(const std::list<NodeGuiPtr> & existingNodesContext,
 
 
     _imp->compositingOperator = new ComboBox(_imp->firstSettingsRow);
+    _imp->compositingOperator->setObjectName(QString::fromUtf8("natronViewerComposite"));
     QObject::connect( _imp->compositingOperator, SIGNAL(currentIndexChanged(int)), this, SLOT(onCompositingOperatorIndexChanged(int)) );
     _imp->compositingOperator->setFixedWidth(fm.horizontalAdvance( QString::fromUtf8("W-OnionSkin") ) + 3 * DROP_DOWN_ICON_SIZE);
     _imp->compositingOperator->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -398,6 +405,7 @@ ViewerTab::ViewerTab(const std::list<NodeGuiPtr> & existingNodesContext,
     _imp->firstRowLayout->addWidget(_imp->secondInputLabel);
 
     _imp->secondInputImage = new ComboBox(_imp->firstSettingsRow);
+    _imp->secondInputImage->setObjectName(QString::fromUtf8("natronViewerB"));
     _imp->secondInputImage->setToolTip( _imp->secondInputLabel->toolTip() );
     _imp->secondInputImage->setFixedWidth(fm.horizontalAdvance( QString::fromUtf8("ColorCorrect1") )  + 3 * DROP_DOWN_ICON_SIZE);
     _imp->secondInputImage->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -1067,6 +1075,7 @@ ViewerTab::ViewerTab(const std::list<NodeGuiPtr> & existingNodesContext,
     QObject::connect( _imp->gainSlider, SIGNAL(positionChanged(double)), this, SLOT(onGainSliderChanged(double)) );
     QObject::connect( _imp->currentFrameBox, SIGNAL(valueChanged(double)), this, SLOT(onCurrentTimeSpinBoxChanged(double)) );
     QObject::connect( _imp->play_Forward_Button, SIGNAL(clicked(bool)), this, SLOT(startPause(bool)) );
+    QObject::connect( &_imp->emptyViewerPlaybackTimer, SIGNAL(timeout()), this, SLOT(advanceEmptyViewerPlayback()) );
     QObject::connect( _imp->play_Backward_Button, SIGNAL(clicked(bool)), this, SLOT(startBackward(bool)) );
     QObject::connect( _imp->previousFrame_Button, SIGNAL(clicked()), this, SLOT(previousFrame()) );
     QObject::connect( _imp->nextFrame_Button, SIGNAL(clicked()), this, SLOT(nextFrame()) );

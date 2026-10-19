@@ -46,10 +46,9 @@ ChannelsComboBox::paintEvent(QPaintEvent* event)
     ComboBox::paintEvent(event);
     int idx = activeIndex();
 
-    if (idx != 1) {
+    if (idx >= 0 && idx <= 5 && idx != 1) {
         QColor color;
         QPainter p(this);
-        QPen pen;
 
         switch (idx) {
         case 0:
@@ -74,16 +73,10 @@ ChannelsComboBox::paintEvent(QPaintEvent* event)
             break;
         }
 
-        pen.setColor(color);
-        p.setPen(pen);
-
-
-        QRectF bRect = rect();
-        QRectF roundedRect = bRect.adjusted(1., 1., -2., -2.);
-        double roundPixels = 3;
-        QPainterPath path;
-        path.addRoundedRect(roundedRect, roundPixels, roundPixels);
-        p.drawPath(path);
+        p.setRenderHint(QPainter::Antialiasing);
+        p.setPen(Qt::NoPen);
+        p.setBrush(color);
+        p.drawEllipse(QPointF(width() - DROP_DOWN_ICON_SIZE * 3, height() / 2.), 2., 2.);
     }
 }
 

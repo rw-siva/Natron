@@ -41,6 +41,14 @@ CLANG_DIAG_OFF(uninitialized)
 #include <QSettings>
 #include <QFileInfo>
 #include <QApplication>
+#include <QAbstractButton>
+#include <QDockWidget>
+#include <QGroupBox>
+#include <QHeaderView>
+#include <QLabel>
+#include <QMenu>
+#include <QMenuBar>
+#include <QTabBar>
 #include <QFileOpenEvent>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QScreen>
@@ -69,6 +77,7 @@ CLANG_DIAG_ON(uninitialized)
 #include "Gui/GuiAppInstance.h"
 #include "Gui/KnobGuiFactory.h"
 #include "Gui/SplashScreen.h"
+#include "Gui/ThemeValues.h"
 
 /**
  * @macro Registers a keybind to the application.
@@ -244,7 +253,29 @@ public:
 protected:
 
     bool event(QEvent* e);
+    bool notify(QObject* receiver, QEvent* e) override;
 };
+
+bool
+Application::notify(QObject* receiver, QEvent* e)
+{
+    // Capitalization is a font rendering property: labels look uppercase while
+    // node names, paths, and parameter values retain their original contents.
+    if (NatronTheme::UppercaseLabels && (e->type() == QEvent::Polish || e->type() == QEvent::Show)) {
+        QWidget* widget = qobject_cast<QWidget*>(receiver);
+        if (widget && (qobject_cast<QLabel*>(widget) || qobject_cast<QAbstractButton*>(widget) ||
+                       qobject_cast<QGroupBox*>(widget) || qobject_cast<QTabBar*>(widget) ||
+                       qobject_cast<QMenu*>(widget) || qobject_cast<QMenuBar*>(widget) ||
+                       qobject_cast<QHeaderView*>(widget) || qobject_cast<QDockWidget*>(widget))) {
+            QFont font = widget->font();
+            if (font.capitalization() != QFont::AllUppercase) {
+                font.setCapitalization(QFont::AllUppercase);
+                widget->setFont(font);
+            }
+        }
+    }
+    return QApplication::notify(receiver, e);
+}
 
 bool
 Application::event(QEvent* e)

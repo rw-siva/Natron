@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NatronWorkspace</class>
+ <widget class="QMainWindow" name="NatronWorkspace">
+  <property name="geometry"><rect><x>0</x><y>0</y><width>1440</width><height>900</height></rect></property>
+  <property name="windowTitle"><string>Natron workspace layout study</string></property>
+  <property name="font"><font><family>Droid Sans</family><pointsize>11</pointsize></font></property>
+  <property name="styleSheet"><string notr="true">QWidget { color: #c7c7c7; background-color: #303030; font-family: "Droid Sans"; font-size: 11pt; }
+QSplitter { background-color: #1f1f1f; }
+QSplitter::handle { background-color: #1f1f1f; }
+QTabWidget::pane { border: 1px solid #1f1f1f; background-color: #303030; }
+QTabBar::tab { background-color: #303030; color: #c7c7c7; border: 1px solid #1f1f1f; padding: 5px 12px; }
+QTabBar::tab:selected { background-color: #474747; border-bottom: 2px solid #f28a00; }
+QTabBar::tab:hover { background-color: #474747; }
+QToolButton { background-color: #303030; border: 1px solid transparent; padding: 2px; }
+QToolButton:hover { background-color: #474747; border: 1px solid #666666; }
+QToolButton:pressed { background-color: #1f1f1f; }
+QWidget#toolBox QToolButton { min-width: 30px; max-width: 30px; min-height: 30px; max-height: 30px; }
+QWidget#viewerPage QToolButton { min-width: 22px; max-width: 22px; min-height: 22px; max-height: 22px; }
+QFrame#viewerCanvas { background-color: #111111; border: 1px solid #1f1f1f; }
+QLabel#viewerCanvasLabel { background-color: #111111; color: #777777; }
+QLabel#nodeGraphLabel { color: #777777; }
+QSlider::groove:horizontal { height: 5px; background-color: #1f1f1f; }
+QSlider::handle:horizontal { width: 10px; margin: -5px 0; background-color: #f28a00; border-radius: 3px; }</string></property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="mainLayout">
+    <property name="spacing"><number>0</number></property>
+    <property name="leftMargin"><number>0</number></property><property name="topMargin"><number>0</number></property>
+    <property name="rightMargin"><number>0</number></property><property name="bottomMargin"><number>0</number></property>
+    <item><widget class="QSplitter" name="leftRightSplitter">
+     <property name="orientation"><enum>Qt::Horizontal</enum></property>
+     <widget class="QWidget" name="toolBox">
+      <property name="minimumSize"><size><width>38</width><height>0</height></size></property>
+      <property name="maximumSize"><size><width>38</width><height>16777215</height></size></property>
+      <layout class="QVBoxLayout" name="toolBoxLayout">
+       <property name="spacing"><number>2</number></property>
+       <property name="leftMargin"><number>4</number></property><property name="topMargin"><number>4</number></property>
+       <property name="rightMargin"><number>4</number></property><property name="bottomMargin"><number>4</number></property>
+       <item><widget class="QToolButton" name="imageToolButton"><property name="toolTip"><string>Image</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/image_grouping_3.png</normaloff></iconset></property><property name="iconSize"><size><width>24</width><height>24</height></size></property></widget></item>
+       <item><widget class="QToolButton" name="colorToolButton"><property name="toolTip"><string>Color</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/color_grouping_3.png</normaloff></iconset></property><property name="iconSize"><size><width>24</width><height>24</height></size></property></widget></item>
+       <item><widget class="QToolButton" name="filterToolButton"><property name="toolTip"><string>Filter</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/filter_grouping_3.png</normaloff></iconset></property><property name="iconSize"><size><width>24</width><height>24</height></size></property></widget></item>
+       <item><widget class="QToolButton" name="mergeToolButton"><property name="toolTip"><string>Merge</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/merge_grouping_3.png</normaloff></iconset></property><property name="iconSize"><size><width>24</width><height>24</height></size></property></widget></item>
+       <item><widget class="QToolButton" name="transformToolButton"><property name="toolTip"><string>Transform</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/transform_grouping_3.png</normaloff></iconset></property><property name="iconSize"><size><width>24</width><height>24</height></size></property></widget></item>
+       <item><spacer name="toolBoxSpacer"><property name="orientation"><enum>Qt::Vertical</enum></property><property name="sizeHint" stdset="0"><size><width>20</width><height>40</height></size></property></spacer></item>
+      </layout>
+     </widget>
+     <widget class="QSplitter" name="propertiesSplitter">
+      <property name="orientation"><enum>Qt::Horizontal</enum></property>
+      <widget class="QSplitter" name="viewerGraphSplitter">
+       <property name="orientation"><enum>Qt::Vertical</enum></property>
+       <widget class="QTabWidget" name="pane1">
+        <property name="currentIndex"><number>0</number></property>
+        <widget class="QWidget" name="viewerPage"><attribute name="title"><string>Viewer1</string></attribute>
+         <layout class="QVBoxLayout" name="viewerLayout">
+          <item><widget class="QLabel" name="viewerToolbar"><property name="text"><string>Viewer toolbar · channels · zoom · display</string></property><property name="maximumSize"><size><width>16777215</width><height>26</height></size></property></widget></item>
+          <item><widget class="QFrame" name="viewerCanvas"><property name="frameShape"><enum>QFrame::StyledPanel</enum></property><layout class="QVBoxLayout" name="viewerCanvasLayout"><item><widget class="QLabel" name="viewerCanvasLabel"><property name="text"><string>Viewer canvas — custom OpenGL widget at runtime</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item></layout></widget></item>
+          <item><layout class="QHBoxLayout" name="transportLayout">
+           <item><spacer name="transportStartSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeType"><enum>QSizePolicy::Expanding</enum></property><property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property></spacer></item>
+           <item><widget class="QToolButton" name="firstFrameButton"><property name="toolTip"><string>First frame</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/firstFrame.png</normaloff></iconset></property><property name="iconSize"><size><width>18</width><height>18</height></size></property></widget></item>
+           <item><widget class="QToolButton" name="previousKeyFrameButton"><property name="toolTip"><string>Previous keyframe</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/prevKF.png</normaloff></iconset></property><property name="iconSize"><size><width>18</width><height>18</height></size></property></widget></item>
+           <item><widget class="QToolButton" name="previousFrameButton"><property name="toolTip"><string>Previous frame</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/back1.png</normaloff></iconset></property><property name="iconSize"><size><width>18</width><height>18</height></size></property></widget></item>
+           <item><widget class="QToolButton" name="playBackwardButton"><property name="toolTip"><string>Play backward</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/rewind.png</normaloff></iconset></property><property name="iconSize"><size><width>18</width><height>18</height></size></property></widget></item>
+           <item><widget class="QToolButton" name="playForwardButton"><property name="toolTip"><string>Play forward</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/play.png</normaloff></iconset></property><property name="iconSize"><size><width>18</width><height>18</height></size></property></widget></item>
+           <item><widget class="QToolButton" name="nextFrameButton"><property name="toolTip"><string>Next frame</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/forward1.png</normaloff></iconset></property><property name="iconSize"><size><width>18</width><height>18</height></size></property></widget></item>
+           <item><widget class="QToolButton" name="nextKeyFrameButton"><property name="toolTip"><string>Next keyframe</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/nextKF.png</normaloff></iconset></property><property name="iconSize"><size><width>18</width><height>18</height></size></property></widget></item>
+           <item><widget class="QToolButton" name="lastFrameButton"><property name="toolTip"><string>Last frame</string></property><property name="icon"><iconset resource="NatronDesign.qrc"><normaloff>:/natron/design/lastFrame.png</normaloff></iconset></property><property name="iconSize"><size><width>18</width><height>18</height></size></property></widget></item>
+           <item><spacer name="transportEndSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeType"><enum>QSizePolicy::Expanding</enum></property><property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property></spacer></item>
+          </layout></item>
+          <item><widget class="QSlider" name="timelineSlider"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget></item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="histogramPage"><attribute name="title"><string>Histogram</string></attribute><layout class="QVBoxLayout" name="histogramLayout"><item><widget class="QLabel" name="histogramLabel"><property name="text"><string>Histogram — custom widget at runtime</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item></layout></widget>
+       </widget>
+       <widget class="QTabWidget" name="workshopPane"><property name="currentIndex"><number>0</number></property>
+        <widget class="QWidget" name="nodeGraphPage"><attribute name="title"><string>Node Graph</string></attribute><layout class="QVBoxLayout" name="nodeGraphLayout"><item><widget class="QLabel" name="nodeGraphLabel"><property name="text"><string>Node Graph — custom scene at runtime</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item></layout></widget>
+        <widget class="QWidget" name="curveEditorPage"><attribute name="title"><string>Curve Editor</string></attribute><layout class="QVBoxLayout" name="curveEditorLayout"><item><widget class="QLabel" name="curveEditorLabel"><property name="text"><string>Curve Editor — custom widget at runtime</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item></layout></widget>
+        <widget class="QWidget" name="dopeSheetPage"><attribute name="title"><string>Dope Sheet</string></attribute><layout class="QVBoxLayout" name="dopeSheetLayout"><item><widget class="QLabel" name="dopeSheetLabel"><property name="text"><string>Dope Sheet — custom widget at runtime</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item></layout></widget>
+       </widget>
+      </widget>
+      <widget class="QTabWidget" name="propertiesPane"><property name="minimumSize"><size><width>280</width><height>0</height></size></property>
+       <widget class="QWidget" name="propertiesPage"><attribute name="title"><string>Properties</string></attribute><layout class="QVBoxLayout" name="propertiesLayout"><item><widget class="QLabel" name="propertiesLabel"><property name="text"><string>Node and project properties</string></property></widget></item><item><spacer name="propertiesSpacer"><property name="orientation"><enum>Qt::Vertical</enum></property><property name="sizeHint" stdset="0"><size><width>20</width><height>40</height></size></property></spacer></item></layout></widget>
+      </widget>
+     </widget>
+    </widget></item>
+   </layout>
+  </widget>
+ </widget>
+ <resources><include location="NatronDesign.qrc"/></resources>
+ <connections/>
+</ui>

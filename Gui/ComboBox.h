@@ -34,6 +34,7 @@ CLANG_DIAG_OFF(deprecated)
 CLANG_DIAG_OFF(uninitialized)
 #include <QSize>
 #include <QFrame>
+#include <QColor>
 #include <QKeySequence>
 #include <QIcon>
 CLANG_DIAG_ON(deprecated)
@@ -66,6 +67,9 @@ class ComboBox
 GCC_DIAG_SUGGEST_OVERRIDE_OFF
     Q_OBJECT
 GCC_DIAG_SUGGEST_OVERRIDE_ON
+    Q_PROPERTY(int cornerRadius READ cornerRadius WRITE setCornerRadius)
+    Q_PROPERTY(int borderWidth READ borderWidth WRITE setBorderWidth)
+    Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor)
 
 private:
     bool _readOnly;
@@ -86,6 +90,9 @@ private:
     mutable bool _validHints;
     unsigned short _align;
     int _currentDelta; // accumulated wheel delta
+    int _cornerRadius;
+    int _borderWidth;
+    QColor _borderColor;
 
 protected:
 
@@ -94,6 +101,29 @@ protected:
 public:
 
     explicit ComboBox(QWidget* parent = 0);
+    int cornerRadius() const { return _cornerRadius; }
+    void setCornerRadius(int radius) {
+        radius = radius < 0 ? 0 : radius;
+        if (_cornerRadius != radius) {
+            _cornerRadius = radius;
+            update();
+        }
+    }
+    int borderWidth() const { return _borderWidth; }
+    void setBorderWidth(int width) {
+        width = width < 0 ? 0 : width;
+        if (_borderWidth != width) {
+            _borderWidth = width;
+            update();
+        }
+    }
+    QColor borderColor() const { return _borderColor; }
+    void setBorderColor(const QColor& color) {
+        if (_borderColor != color) {
+            _borderColor = color;
+            update();
+        }
+    }
 
     virtual ~ComboBox() OVERRIDE
     {

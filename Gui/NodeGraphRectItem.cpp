@@ -25,9 +25,11 @@
 // ***** END PYTHON BLOCK *****
 
 #include "NodeGraphRectItem.h"
+#include "Gui/ThemeValues.h"
 
 #include <QPainter>
 #include <QLinearGradient>
+#include <QPen>
 
 NATRON_NAMESPACE_ENTER
 
@@ -37,6 +39,14 @@ NodeGraphRectItem::NodeGraphRectItem(QGraphicsItem *parent,
 , _cornerRadiusPx(cornerRadiusPx)
 , _flat(false)
 {
+    if (NatronTheme::NodeBorderWidth == 0) {
+        setPen(Qt::NoPen);
+    } else {
+        setPen(QPen(QColor(NatronTheme::NodeBorderRed,
+                           NatronTheme::NodeBorderGreen,
+                           NatronTheme::NodeBorderBlue),
+                    NatronTheme::NodeBorderWidth));
+    }
 }
 
 void

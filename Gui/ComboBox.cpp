@@ -104,6 +104,9 @@ ComboBox::ComboBox(QWidget* parent)
     , _validHints(false)
     , _align(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextExpandTabs)
     , _currentDelta(0)
+    , _cornerRadius(3)
+    , _borderWidth(1)
+    , _borderColor(Qt::black)
     , ignoreWheelEvent(false)
 {
     _rootNode = std::make_shared<ComboBoxMenuNode>();
@@ -305,28 +308,20 @@ ComboBox::paintEvent(QPaintEvent* /*e*/)
                               Color::floatToInt<256>(b) );
         }
 
-        double fw = frameWidth();
-        QPen pen;
-        if ( !hasFocus() ) {
-            pen.setColor(Qt::black);
-        } else {
-            double r, g, b;
-            appPTR->getCurrentSettings()->getSelectionColor(&r, &g, &b);
-            QColor c;
-            c.setRgb( Color::floatToInt<256>(r),
-                      Color::floatToInt<256>(g),
-                      Color::floatToInt<256>(b) );
-            fw = 2;
+        const double fw = _borderWidth;
+        QPen pen(_borderColor);
+        pen.setWidth(_borderWidth);
+        if (_borderWidth == 0) {
+            pen.setStyle(Qt::NoPen);
         }
         p.setPen(pen);
 
-
-        QRectF roundedRect = bRect.adjusted(fw / 2., fw / 2., -fw, -fw);
+        QRectF roundedRect = bRect.adjusted(fw / 2., fw / 2., -fw / 2., -fw / 2.);
         bRect.adjust(fw, fw, -fw, -fw);
-        p.fillRect(bRect, fillColor);
-        double roundPixels = 3;
+        p.setRenderHint(QPainter::Antialiasing);
         QPainterPath path;
-        path.addRoundedRect(roundedRect, roundPixels, roundPixels);
+        path.addRoundedRect(roundedRect, _cornerRadius, _cornerRadius);
+        p.fillPath(path, fillColor);
         p.drawPath(path);
     }
     QColor textColor;

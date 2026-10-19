@@ -77,6 +77,7 @@ CLANG_DIAG_ON(uninitialized)
 #include "Gui/DopeSheetEditor.h"
 #include "Gui/Edge.h"
 #include "Gui/Gui.h"
+#include "Gui/ThemeValues.h"
 #include "Gui/GuiAppInstance.h"
 #include "Gui/GuiApplicationManager.h"
 #include "Gui/GuiDefines.h"
@@ -637,7 +638,7 @@ NodeGui::createGui()
     if (!node) {
         return; // throw exception instead?
     }
-    int cornerRadiusPx = 5;
+    int cornerRadiusPx = NatronTheme::NodeCornerRadius;
     _boundingBox = new NodeGraphRectItem(this, cornerRadiusPx);
     _boundingBox->setZValue(depth);
 
@@ -690,7 +691,8 @@ NodeGui::createGui()
 
 
     _nameItem = new NodeGraphTextItem(getDagGui(), this, false);
-    _nameItem->setPlainText( QString::fromUtf8( node->getLabel().c_str() ) );
+    const QString nodeName = QString::fromUtf8( node->getLabel().c_str() );
+    _nameItem->setPlainText(NatronTheme::UppercaseNodeNames ? nodeName.toUpper() : nodeName);
     _nameItem->setDefaultTextColor( QColor(0, 0, 0, 255) );
     //_nameItem->setFont( QFont(appFont,appFontSize) );
     _nameItem->setZValue(depth + 1);
@@ -1784,12 +1786,18 @@ NodeGui::firstAvailableEdge()
 void
 NodeGui::applyBrush(const QBrush & brush)
 {
-    _boundingBox->setBrush(brush);
+    QBrush displayBrush = brush;
+    if (NatronTheme::OverrideNodeFill && !dynamic_cast<BackdropGui*>(this)) {
+        displayBrush.setColor(QColor(NatronTheme::NodeFillRed,
+                                     NatronTheme::NodeFillGreen,
+                                     NatronTheme::NodeFillBlue));
+    }
+    _boundingBox->setBrush(displayBrush);
     if ( mustFrameName() ) {
-        _nameFrame->setBrush(brush);
+        _nameFrame->setBrush(displayBrush);
     }
     if ( mustAddResizeHandle() ) {
-        _resizeHandle->setBrush(brush);
+        _resizeHandle->setBrush(displayBrush);
     }
 }
 
@@ -3099,6 +3107,7 @@ NodeGui::setNameItemHtml(const QString & name,
         return;
     }
     QString textLabel;
+    const QString displayName = NatronTheme::UppercaseNodeNames ? name.toUpper() : name;
 
     if ( !label.isEmpty() ) {
         QString labelCopy = label;
@@ -3124,7 +3133,7 @@ NodeGui::setNameItemHtml(const QString & name,
             if (endFontTag != -1) {
                 endFontTag += toFind.size();
             }
-            QString toInsert = name.trimmed();
+            QString toInsert = displayName.trimmed();
             int labelEndPos = -1;
             // is there really something before the closing font tag? if yes, insert a newline
             if (endFontTag != -1) {
@@ -3143,7 +3152,7 @@ NodeGui::setNameItemHtml(const QString & name,
             }
             labelCopy.insert(endFontTag == -1 ? 0 : endFontTag, toInsert);
         } else {
-            labelCopy.prepend( name.trimmed() + QLatin1Char('\n') );
+            labelCopy.prepend( displayName.trimmed() + QLatin1Char('\n') );
             if ( !_channelsExtraLabel.isEmpty() ) {
                 labelCopy.append( QLatin1Char('\n') + _channelsExtraLabel.trimmed() );
             }
@@ -3163,7 +3172,7 @@ NodeGui::setNameItemHtml(const QString & name,
                            .arg( QColor(Qt::black).name() )
                            .arg(QApplication::font().family()));
            textLabel.append(fontTag);*/
-        textLabel.append(name + QLatin1Char('\n') + _channelsExtraLabel);
+        textLabel.append(displayName + QLatin1Char('\n') + _channelsExtraLabel);
         //textLabel.append("</font>");
     }
     QString finalText;

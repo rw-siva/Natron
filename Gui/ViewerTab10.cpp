@@ -27,6 +27,7 @@
 #include "ViewerTabPrivate.h"
 
 #include <cassert>
+#include <algorithm>
 #include <stdexcept>
 #include <QDebug>
 
@@ -266,6 +267,9 @@ ViewerTab::startPause(bool b)
 {
     abortRendering();
     if (b) {
+        if (startEmptyViewerPlayback(1)) {
+            return;
+        }
         Gui* gui = getGui();
         if (!gui) {
             return;
@@ -287,6 +291,7 @@ ViewerTab::startPause(bool b)
 void
 ViewerTab::abortRendering()
 {
+    _imp->emptyViewerPlaybackTimer.stop();
     if (_imp->play_Forward_Button) {
         _imp->play_Forward_Button->setDown(false);
         _imp->play_Forward_Button->setChecked(false);
@@ -339,6 +344,9 @@ ViewerTab::onEngineStarted(bool forward)
 void
 ViewerTab::onSetDownPlaybackButtonsTimeout()
 {
+    if (_imp->emptyViewerPlaybackTimer.isActive()) {
+        return;
+    }
     if ( _imp->viewerNode && _imp->viewerNode->getRenderEngine() && !_imp->viewerNode->getRenderEngine()->isDoingSequentialRender() ) {
         const std::list<ViewerTab*>& viewers = getGui()->getViewersList();
         for (std::list<ViewerTab*>::const_iterator it = viewers.begin(); it != viewers.end(); ++it) {
@@ -400,6 +408,9 @@ ViewerTab::startBackward(bool b)
 {
     abortRendering();
     if (b) {
+        if (startEmptyViewerPlayback(-1)) {
+            return;
+        }
         Gui* gui = getGui();
         if (!gui) {
             return;
@@ -416,6 +427,63 @@ ViewerTab::startBackward(bool b)
         }
         _imp->viewerNode->getRenderEngine()->renderFromCurrentFrame(app->isRenderStatsActionChecked(), viewsToRender, eRenderDirectionBackward);
     }
+}
+
+bool
+ViewerTab::startEmptyViewerPlayback(int direction)
+{
+    int activeA = -1;
+    int activeB = -1;
+    _imp->viewerNode->getActiveInputs(activeA, activeB);
+    if ((activeA >= 0 && _imp->viewerNode->getInput(activeA)) ||
+        (activeB >= 0 && _imp->viewerNode->getInput(activeB))) {
+        return false;
+    }
+
+    _imp->emptyViewerPlaybackDirection = direction;
+    const double fps = _imp->fpsBox ? _imp->fpsBox->value() : 24.;
+    _imp->emptyViewerPlaybackTimer.start(std::max(1, static_cast<int>(1000. / std::max(1., fps))));
+    _imp->play_Forward_Button->setChecked(direction > 0);
+    _imp->play_Backward_Button->setChecked(direction < 0);
+    return true;
+}
+
+void
+ViewerTab::advanceEmptyViewerPlayback()
+{
+    int activeA = -1;
+    int activeB = -1;
+    _imp->viewerNode->getActiveInputs(activeA, activeB);
+    if ((activeA >= 0 && _imp->viewerNode->getInput(activeA)) ||
+        (activeB >= 0 && _imp->viewerNode->getInput(activeB))) {
+        startPause(true);
+        return;
+    }
+    int first = 0;
+    int last = 0;
+    getTimelineBounds(&first, &last);
+    if (last <= first) {
+        abortRendering();
+        return;
+    }
+    int next = _imp->viewerNode->getTimeline()->currentFrame() + _imp->emptyViewerPlaybackDirection;
+    if (next > last || next < first) {
+        const PlaybackModeEnum mode = getPlaybackMode();
+        if (mode == ePlaybackModeOnce) {
+            abortRendering();
+            return;
+        }
+        if (mode == ePlaybackModeBounce) {
+            _imp->emptyViewerPlaybackDirection = -_imp->emptyViewerPlaybackDirection;
+            next = _imp->viewerNode->getTimeline()->currentFrame() + _imp->emptyViewerPlaybackDirection;
+        } else {
+            next = _imp->emptyViewerPlaybackDirection > 0 ? first : last;
+        }
+    }
+    _imp->viewerNode->getTimeline()->seekFrame(next, false, 0, eTimelineChangeReasonPlaybackSeek);
+    const bool wasBlocked = _imp->currentFrameBox->blockSignals(true);
+    _imp->currentFrameBox->setValue(next);
+    _imp->currentFrameBox->blockSignals(wasBlocked);
 }
 
 void
