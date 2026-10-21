@@ -6,9 +6,9 @@
 namespace NatronTheme {
 static const int NodeCornerRadius = 0;
 static const int NodeBorderWidth = 1;
-static const int NodeBorderRed = 0;
-static const int NodeBorderGreen = 0;
-static const int NodeBorderBlue = 0;
+static const int NodeBorderRed = 31;
+static const int NodeBorderGreen = 31;
+static const int NodeBorderBlue = 31;
 static const bool OverrideNodeFill = false;
 static const bool UppercaseLabels = true;
 static const bool UppercaseNodeNames = true;

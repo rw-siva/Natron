@@ -37,12 +37,13 @@
 #include "Gui/KnobGui.h"
 #include "Gui/GuiMacros.h"
 #include "Gui/KnobWidgetDnD.h"
+#include "Gui/ThemeValues.h"
 
 NATRON_NAMESPACE_ENTER
 
 ClickableLabel::ClickableLabel(const QString &text,
                                QWidget *parent)
-    : Label(text, parent)
+    : Label(NatronTheme::UppercaseLabels ? text.toUpper() : text, parent)
     , _toggled(false)
     , _bold(false)
     , _dirty(false)
@@ -96,7 +97,8 @@ ClickableLabel::changeEvent(QEvent* e)
 void
 ClickableLabel::setText_overload(const QString & str)
 {
-    QString paintTxt = str;
+    // Use the displayed case for layout measurements as well as painting.
+    QString paintTxt = NatronTheme::UppercaseLabels ? str.toUpper() : str;
 
     if ( !isEnabled() ) {
         paintTxt.prepend( QString::fromUtf8("<font color=\"#000000\">") );

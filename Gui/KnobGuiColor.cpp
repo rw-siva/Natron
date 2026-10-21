@@ -149,6 +149,8 @@ ColorPickerLabel::setColor(const QColor & color)
         //draw the picker on top of the label
         QPixmap pickerIcon;
         appPTR->getIcon(NATRON_PIXMAP_COLOR_PICKER, &pickerIcon);
+        // Resource icons may be larger than the swatch; scale before composing.
+        pickerIcon = pickerIcon.scaled(size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         QImage pickerImg = pickerIcon.toImage();
         QImage img(pickerIcon.width(), pickerIcon.height(), QImage::Format_ARGB32);
         img.fill( color.rgb() );

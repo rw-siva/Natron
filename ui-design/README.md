@@ -5,7 +5,7 @@
 The working WSLg launch uses Qt Wayland. In PowerShell, run:
 
 ```powershell
-wsl -d Ubuntu --exec sh -lc 'cd /opt/assets/scripts/vibe/claude/Natron && cmake --build build-qt6 --target Natron -j2 && QT_QPA_PLATFORM=wayland ./build-qt6/App/Natron'
+wsl -d Ubuntu --exec sh -lc 'cd /opt/assets/scripts/vibe/claude/Natron && cmake --build build-qt6 --target Natron -j2 && OFX_PLUGIN_PATH=/opt/assets/software/natron/Natron-2.5.0-Linux-x86_64-no-installer/Plugins/OFX QT_QPA_PLATFORM=wayland ./build-qt6/App/Natron'
 ```
 
 Close an older Natron window before relaunching if you want the rebuilt UI in
@@ -33,6 +33,8 @@ and replace it with a PNG or SVG file. Click **Open real Natron workspace** in
 the **Real Natron** tab to launch a fresh Natron session with a Sphere node,
 Viewer, and animated Sphere parameter. Select Sphere1 to inspect the actual
 Properties panel; open Natron's Dope Sheet and Curve Editor for the keyframes.
+The always-visible **Open preview Natron** button beside **Build Natron**
+launches the same real Natron preview from any tab.
 Changes to the generated stylesheet update this preview when auto-save runs.
 Use `python3 ui-design/theme_editor.py --open-live` to open both windows at once.
 The editor's other tabs are labeled sketches because they do not reproduce

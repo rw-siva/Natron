@@ -725,6 +725,9 @@ def run_gui(theme: dict, smoke: bool = False, open_live: bool = False) -> int:
             self.build_button = QPushButton("Build Natron")
             self.build_button.clicked.connect(self.build)
             actions.addWidget(self.build_button)
+            self.open_preview_button = QPushButton("Open preview Natron")
+            self.open_preview_button.clicked.connect(self.open_live_preview)
+            actions.addWidget(self.open_preview_button)
             reset_button = QPushButton("Reset preview")
             reset_button.clicked.connect(self.reset)
             actions.addWidget(reset_button)
@@ -863,6 +866,10 @@ def run_gui(theme: dict, smoke: bool = False, open_live: bool = False) -> int:
             environment = QProcessEnvironment.systemEnvironment()
             environment.insert("NATRON_THEME_STYLESHEET", str(STYLESHEET))
             environment.insert("QT_QPA_PLATFORM", "wayland")
+            bundled_ofx = Path("/opt/assets/software/natron/Natron-2.5.0-Linux-x86_64-no-installer/Plugins/OFX")
+            if bundled_ofx.is_dir():
+                existing_ofx = environment.value("OFX_PLUGIN_PATH")
+                environment.insert("OFX_PLUGIN_PATH", f"{bundled_ofx}:{existing_ofx}" if existing_ofx else str(bundled_ofx))
             preview_process = QProcess(self)
             preview_process.setProcessEnvironment(environment)
             preview_process.setProgram(str(binary))
@@ -1012,6 +1019,7 @@ def run_gui(theme: dict, smoke: bool = False, open_live: bool = False) -> int:
                 assert font_edit is not None and not font_edit.isReadOnly(), "Font family is not editable"
                 type_text(font_edit, "Ubuntu")
                 assert window.font_family.currentText() == "Ubuntu", "Font family did not accept typing"
+                assert window.open_preview_button.isEnabled(), "Natron preview button is disabled"
                 color_key = COLORS[0][0]
                 window.pick_color(color_key)
                 assert window.color_dialogs[color_key].isVisible(), "Color picker did not open"
