@@ -18,7 +18,7 @@
   "menu_radius": 0,
   "tooltip_radius": 0,
   "list_radius": 0,
-  "node_radius": 0,
+  "node_radius": 5,
   "node_border_width": 1,
   "override_node_fill": false,
   "uppercase_labels": true,
