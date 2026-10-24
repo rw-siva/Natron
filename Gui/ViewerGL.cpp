@@ -526,6 +526,16 @@ ViewerGL::paintGL()
         if (_imp->ms == eMouseStateSelecting) {
             _imp->drawSelectionRectangle();
         }
+
+        // The image may contain transparent pixels, but the on-screen
+        // QOpenGLWidget must remain opaque so other windows cannot show through.
+        {
+            GLProtectAttrib a(GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_SCISSOR_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
+            glClearColor(0.f, 0.f, 0.f, 1.f);
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
         glCheckErrorAssert();
     } // GLProtectAttrib a(GL_TRANSFORM_BIT);
 } // paintGL

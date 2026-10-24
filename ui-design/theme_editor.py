@@ -866,6 +866,9 @@ def run_gui(theme: dict, smoke: bool = False, open_live: bool = False) -> int:
             environment = QProcessEnvironment.systemEnvironment()
             environment.insert("NATRON_THEME_STYLESHEET", str(STYLESHEET))
             environment.insert("QT_QPA_PLATFORM", "wayland")
+            template_path = str(ROOT / "templates")
+            existing_plugins = environment.value("NATRON_PLUGIN_PATH")
+            environment.insert("NATRON_PLUGIN_PATH", f"{template_path}:{existing_plugins}" if existing_plugins else template_path)
             bundled_ofx = Path("/opt/assets/software/natron/Natron-2.5.0-Linux-x86_64-no-installer/Plugins/OFX")
             if bundled_ofx.is_dir():
                 existing_ofx = environment.value("OFX_PLUGIN_PATH")

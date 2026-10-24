@@ -16,7 +16,8 @@ viewer = app.createNode("fr.inria.built-in.Viewer")
 gravity.connectInput(0, emitter)
 solver.connectInput(0, gravity)
 scene.connectInput(0, solver)
-scanline.connectInput(0, camera)
+# ScanlineRender inputs: 0 = bg, 1 = obj/scn, 2 = cam.
+scanline.connectInput(2, camera)
 scanline.connectInput(1, scene)
 viewer.connectInput(0, scanline)
 
